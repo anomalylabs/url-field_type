@@ -12,13 +12,6 @@ class UrlFieldType extends FieldTypeAbstract
     public $columnType = 'string';
 
     /**
-     * Field type version
-     *
-     * @var string
-     */
-    public $version = '1.1.0';
-
-    /**
      * Initial field type validation requirements.
      *
      * @var array
@@ -28,22 +21,12 @@ class UrlFieldType extends FieldTypeAbstract
     );
 
     /**
-     * Field type author information.
-     *
-     * @var array
-     */
-    public $author = array(
-        'name' => 'AI Web Systems, Inc.',
-        'url'  => 'http://aiwebsystems.com/',
-    );
-
-    /**
      * Return the input used for forms.
      *
      * @return mixed
      */
-    public function formInput()
+    public function input()
     {
-        return \Form::input('email', $this->formSlug, $this->value);
+        return \Form::input('text', $this->inputName(), $this->value());
     }
 }
