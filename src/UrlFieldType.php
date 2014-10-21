@@ -4,6 +4,15 @@ use Anomaly\Streams\Platform\Addon\FieldType\FieldTypeAddon;
 
 class UrlFieldType extends FieldTypeAddon
 {
+    protected $slug = 'url';
+
+    /**
+     * The database column type this field type uses.
+     *
+     * @var string
+     */
+    public $columnType = 'string';
+
     /**
      * Initial field type validation requirements.
      *
@@ -20,6 +29,6 @@ class UrlFieldType extends FieldTypeAddon
      */
     public function input()
     {
-        return \Form::input('text', $this->inputName(), $this->value());
+        return \Form::input('text', $this->inputName(), $this->value);
     }
 }
