@@ -1,16 +1,9 @@
-<?php namespace Anomaly\Streams\FieldType\Url;
+<?php namespace Anomaly\Streams\Addon\FieldType\Url;
 
-use Streams\Core\Addon\FieldTypeAbstract;
+use Anomaly\Streams\Platform\Addon\FieldType\FieldTypeAddon;
 
-class UrlFieldType extends FieldTypeAbstract
+class UrlFieldType extends FieldTypeAddon
 {
-    /**
-     * The database column type this field type uses.
-     *
-     * @var string
-     */
-    public $columnType = 'string';
-
     /**
      * Initial field type validation requirements.
      *
