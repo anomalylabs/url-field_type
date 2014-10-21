@@ -1,4 +1,4 @@
-<?php namespace Streams\Addon\FieldType\Url;
+<?php namespace Anomaly\Streams\FieldType\Url;
 
 use Streams\Core\Addon\FieldTypeAbstract;
 
