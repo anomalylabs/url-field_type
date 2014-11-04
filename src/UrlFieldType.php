@@ -2,16 +2,35 @@
 
 use Anomaly\Streams\Platform\Addon\FieldType\FieldTypeAddon;
 
+/**
+ * Class UrlFieldType
+ *
+ * @link          http://anomaly.is/streams-platform
+ * @author        AnomalyLabs, Inc. <hello@anomaly.is>
+ * @author        Ryan Thompson <ryan@anomaly.is>
+ * @package       Anomaly\Streams\Addon\FieldType\Url
+ */
 class UrlFieldType extends FieldTypeAddon
 {
-    public $columnType = 'string';
 
-    public $validation = array(
+    /**
+     * Base field type rules.
+     *
+     * @var array
+     */
+    protected $rules = array(
         'url'
     );
 
+    /**
+     * Return the input HTML.
+     *
+     * @return mixed
+     */
     public function input()
     {
-        return \Form::input('text', $this->inputName(), $this->value);
+        $placeholder = $this->getPlaceholder();
+
+        return app('form')->url($this->getFieldName(), $this->getValue(), compact('placeholder'));
     }
 }
