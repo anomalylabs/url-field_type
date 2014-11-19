@@ -18,19 +18,19 @@ class UrlFieldType extends FieldType
      *
      * @var array
      */
-    protected $rules = array(
-        'url'
-    );
+    protected $rules = ['url'];
 
     /**
-     * Return the input HTML.
+     * Get view data for the input.
      *
-     * @return mixed
+     * @return array
      */
-    public function input()
+    public function getInputData()
     {
-        $placeholder = $this->getPlaceholder();
+        $data = parent::getInputData();
 
-        return app('form')->url($this->getFieldName(), $this->getValue(), compact('placeholder'));
+        $data['type'] = 'url';
+
+        return $data;
     }
 }
