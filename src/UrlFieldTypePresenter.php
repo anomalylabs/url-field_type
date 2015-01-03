@@ -1,4 +1,4 @@
-<?php namespace Anomaly\Streams\Addon\FieldType\Url;
+<?php namespace Anomaly\UrlFieldType;
 
 use Anomaly\Streams\Platform\Addon\FieldType\FieldTypePresenter;
 
