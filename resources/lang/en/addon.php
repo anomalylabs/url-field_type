@@ -2,5 +2,5 @@
 
 return [
     'name'        => 'URL',
-    'description' => 'URL field type.',
+    'description' => 'A URL input field type.',
 ];

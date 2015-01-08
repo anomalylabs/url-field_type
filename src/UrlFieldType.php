@@ -21,16 +21,9 @@ class UrlFieldType extends FieldType
     protected $rules = ['url'];
 
     /**
-     * Get view data for the input.
+     * The input view.
      *
-     * @return array
+     * @var string
      */
-    public function getInputData()
-    {
-        $data = parent::getInputData();
-
-        $data['type'] = 'url';
-
-        return $data;
-    }
+    protected $inputView = 'anomaly.field_type.url::input';
 }
