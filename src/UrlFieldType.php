@@ -8,7 +8,7 @@ use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
  * @link          http://anomaly.is/streams-platform
  * @author        AnomalyLabs, Inc. <hello@anomaly.is>
  * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\Streams\Addon\FieldType\Url
+ * @package       Anomaly\UrlFieldType
  */
 class UrlFieldType extends FieldType
 {
@@ -18,7 +18,9 @@ class UrlFieldType extends FieldType
      *
      * @var array
      */
-    protected $rules = ['url'];
+    protected $rules = [
+        'url'
+    ];
 
     /**
      * The input view.

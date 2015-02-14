@@ -1,7 +1,7 @@
 {
     "name": "anomaly/url-field_type",
     "type": "streams-addon",
-    "description": "A URL input field type.",
+    "description": "A URL field type.",
     "keywords": [
         "streams-addon",
         "url",
