@@ -1,7 +1,15 @@
-<input
-        type="url"
-        name="{{ field_type.getInputName() }}"
-        value="{{ field_type.value }}"
-        placeholder="{{ trans(field_type.placeholder) }}"
-        class="form-control"
-        >
+<div class="input-group">
+
+    <span class="input-group-addon">
+        <i class="fa fa-globe"></i>
+    </span>
+
+    <input
+            type="url"
+            name="{{ field_type.getInputName() }}"
+            value="{{ field_type.value }}"
+            placeholder="{{ trans(field_type.placeholder) ?: 'http://' }}"
+            class="form-control"
+            >
+
+</div>
