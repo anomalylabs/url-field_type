@@ -22,12 +22,12 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     protected $object;
 
     /**
-     * Return an anchor for the link.
+     * Return a link.
      *
      * @param null $text
      * @return bool
      */
-    public function anchor($title = null, $attributes = [])
+    public function link($title = null, $attributes = [])
     {
         if (!$title) {
             $title = $this->object->getValue();
