@@ -22,6 +22,20 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     protected $object;
 
     /**
+     * Return the parsed URL.
+     *
+     * @return array|null
+     */
+    public function parsed()
+    {
+        if ($url = $this->object->getValue()) {
+            return parse_url($url);
+        }
+
+        return null;
+    }
+
+    /**
      * Return a link.
      *
      * @param null $text
