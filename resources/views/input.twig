@@ -6,10 +6,11 @@
 
     <input
             type="url"
-            name="{{ field_type.input_name }}"
-            value="{{ field_type.value }}"
-            placeholder="{{ trans(field_type.placeholder) ?: 'http://' }}"
             class="form-control"
-            >
+            value="{{ field_type.value }}"
+            name="{{ field_type.input_name }}"
+            placeholder="{{ trans(field_type.placeholder) ?: 'http://' }}"
+            {{ field_type.disabled ? 'disabled' }}
+            {{ field_type.readonly ? 'readonly' }}>
 
 </div>

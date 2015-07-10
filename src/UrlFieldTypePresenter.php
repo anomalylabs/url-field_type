@@ -1,6 +1,7 @@
 <?php namespace Anomaly\UrlFieldType;
 
 use Anomaly\Streams\Platform\Addon\FieldType\FieldTypePresenter;
+use Collective\Html\HtmlBuilder;
 
 /**
  * Class UrlFieldTypePresenter
@@ -14,12 +15,46 @@ class UrlFieldTypePresenter extends FieldTypePresenter
 {
 
     /**
-     * The decorated object.
-     * This is for IDE support.
+     * The HTML builder.
      *
-     * @var UrlFieldType
+     * @var HtmlBuilder
      */
-    protected $object;
+    protected $html;
+
+    /**
+     * Create a new UrlFieldTypePresenter instance.
+     *
+     * @param HtmlBuilder $html
+     * @param             $object
+     */
+    public function __construct(HtmlBuilder $html, $object)
+    {
+        $this->html = $html;
+
+        parent::__construct($object);
+    }
+
+
+    /**
+     * Return the parsed query string.
+     *
+     * @param null $key
+     * @return null|mixed
+     */
+    public function query($key = null)
+    {
+        if (!$parsed = $this->parsed()) {
+            return null;
+        }
+
+        parse_str(array_get($parsed, 'query'), $query);
+
+        if ($key) {
+            return array_get($query, $key);
+        }
+
+        return $query;
+    }
 
     /**
      * Return the parsed URL.
@@ -43,14 +78,14 @@ class UrlFieldTypePresenter extends FieldTypePresenter
      */
     public function link($title = null, $attributes = [])
     {
-        if (!$title) {
-            $title = $this->object->getValue();
-        }
-
         if (!$url = $this->object->getValue()) {
             return null;
         }
 
-        return app('html')->link($url, $title, $attributes);
+        if (!$title) {
+            $title = $this->object->getValue();
+        }
+
+        return $this->html->link($url, $title, $attributes);
     }
 }
