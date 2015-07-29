@@ -1,41 +1,45 @@
 # Output
 
-This field type returns a URL
+This field type returns the value as it's stored in the database by default.
 
 ### Query
 
-Return the parsed query string.  
+Return the parsed query string.
+
 Optionally a key may be provided if you want a specific query parameter.
 
 ```
 // Twig usage
-{{ entry.example.query($key) }}
+{{ entry.example.query('key') }}
 
 // API usage
-$entry->example->query($key);
+$entry->example->query('key');
 ```
 
 ### Parsed
 
-Return the parsed URL.  
-[Parsed Output](http://php.net/manual/en/function.parse-url.php)
+Return the parsed URL. See available [parsed output](http://php.net/manual/en/function.parse-url.php).
 
 ```
 // Twig usage
-{{ entry.example.parsed }}
+{{ entry.example.parsed.host }} // Outputs www.anomaly.is
 
 // API usage
-$entry->example->parsed;
+$entry->example->parsed->host; // Outputs www.anomaly.is
 ```
 
 ### Link
 
-Return a html link.  
-Optionally a title and attributes array may be passed in.
+`title` - The title of the link. If none is provided the URL will be used.
+
+`attributes` - The HTML attributes as an array. No attributes are set by default.
+
+Return am HTML anchor to the URL.
 
 ```
 // Twig usage
-{{ entry.example.link($title, {'class': 'example}) }}
+{{ entry.example.link('AnomalyLabs, Inc.', {'target': '_blank'})|raw }}
 
-$entry->example->link($title, ['class' => 'example']);
+// API usage
+$entry->example->link('AnomalyLabs, Inc.', ['target' => '_blank']);
 ```

@@ -7,7 +7,7 @@ protected $fields = [
     'example' => [
         'type'   => 'anomaly.field_type.url',
         'config' => [
-            'default_value' => 'http://pyrocms.com'
+            'default_value' => 'http://www.anomaly.is'
         ]
     ]
 ];
