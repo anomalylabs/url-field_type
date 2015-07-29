@@ -30,7 +30,8 @@ $entry->example->parsed;
 
 ### Link
 
-Return a html link. Optionally a title and attributes array may be passed in.
+Return a html link.  
+Optionally a title and attributes array may be passed in.
 
 ```
 // Twig usage
