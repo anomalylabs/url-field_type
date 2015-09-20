@@ -59,12 +59,20 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     /**
      * Return the parsed URL.
      *
+     * @param null $key
      * @return array|null
      */
-    public function parsed()
+    public function parsed($key = null)
     {
         if ($url = $this->object->getValue()) {
-            return parse_url($url);
+
+            $parsed = parse_url($url);
+
+            if ($key) {
+                return array_get($parsed, $key);
+            }
+
+            return $parsed;
         }
 
         return null;
@@ -87,5 +95,23 @@ class UrlFieldTypePresenter extends FieldTypePresenter
         }
 
         return $this->html->link($url, $title, $attributes);
+    }
+
+    /**
+     * Return the URL to the provided path.
+     *
+     * @param null $path
+     * @return string
+     */
+    public function to($path = null)
+    {
+        $scheme = $this->parsed('scheme');
+        $host   = $this->parsed('host');
+        $port   = $this->parsed('port');
+
+        $port = $port ? ':' . $port : null;
+        $path = $path ? '/' . $path : null;
+
+        return "{$scheme}://{$host}{$port}{$path}";
     }
 }
