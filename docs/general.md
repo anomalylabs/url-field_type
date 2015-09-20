@@ -72,3 +72,15 @@ Returns an HTML anchor to the URL.
     
     // API usage
     $entry->example->link('AnomalyLabs, Inc.', ['target' => '_blank']);
+
+### `to($path = null)`
+
+`$path` - The URL path to append to the domain.
+
+Returns a URL to the given path based on the input domain.
+
+    // Twig usage
+    {{ entry.example.to('foo/bar') }}
+    
+    // API usage
+    $entry->example->to('foo/bar');
