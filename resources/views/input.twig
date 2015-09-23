@@ -11,6 +11,7 @@
             name="{{ field_type.input_name }}"
             placeholder="{{ trans(field_type.placeholder) ?: 'http://' }}"
             {{ field_type.disabled ? 'disabled' }}
-            {{ field_type.readonly ? 'readonly' }}>
+            {{ field_type.readonly ? 'readonly' }}
+            {{ field_type.required ? 'required' }}>
 
 </div>
