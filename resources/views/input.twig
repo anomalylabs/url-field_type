@@ -1,17 +1,10 @@
-<div class="input-group">
-
-    <span class="input-group-addon">
-        <i class="fa fa-globe"></i>
-    </span>
-
-    <input
-            type="url"
-            class="form-control"
-            value="{{ field_type.value }}"
-            name="{{ field_type.input_name }}"
-            placeholder="{{ trans(field_type.placeholder) ?: 'http://' }}"
-            {{ field_type.disabled ? 'disabled' }}
-            {{ field_type.readonly ? 'readonly' }}
-            {{ field_type.required ? 'required' }}>
-
-</div>
+<input
+        type="url"
+        class="form-control"
+        value="{{ field_type.value }}"
+        name="{{ field_type.input_name }}"
+        placeholder="{{ trans(field_type.placeholder) ?: 'http://' }}"
+        {{ html_attributes(field_type.attributes) }}
+        {{ field_type.disabled ? 'disabled' }}
+        {{ field_type.readonly ? 'readonly' }}
+        {{ field_type.required ? 'required' }}>
