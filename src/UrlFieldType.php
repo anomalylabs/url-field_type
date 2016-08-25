@@ -8,7 +8,6 @@ use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
  * @link          http://pyrocms.com/
  * @author        PyroCMS, Inc. <support@pyrocms.com>
  * @author        Ryan Thompson <ryan@pyrocms.com>
- * @package       Anomaly\UrlFieldType
  */
 class UrlFieldType extends FieldType
 {
@@ -19,7 +18,7 @@ class UrlFieldType extends FieldType
      * @var array
      */
     protected $rules = [
-        'url'
+        'url',
     ];
 
     /**

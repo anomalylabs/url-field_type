@@ -9,7 +9,6 @@ use Collective\Html\HtmlBuilder;
  * @link          http://pyrocms.com/
  * @author        PyroCMS, Inc. <support@pyrocms.com>
  * @author        Ryan Thompson <ryan@pyrocms.com>
- * @package       Anomaly\UrlFieldType
  */
 class UrlFieldTypePresenter extends FieldTypePresenter
 {
@@ -38,7 +37,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     /**
      * Return the parsed query string.
      *
-     * @param null $key
+     * @param  null       $key
      * @return null|mixed
      */
     public function query($key = null)
@@ -59,7 +58,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     /**
      * Return the parsed URL.
      *
-     * @param null $key
+     * @param  null       $key
      * @return array|null
      */
     public function parsed($key = null)
@@ -81,7 +80,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     /**
      * Return a link.
      *
-     * @param null $text
+     * @param  null $text
      * @return bool
      */
     public function link($title = null, $attributes = [])
@@ -100,7 +99,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     /**
      * Return the URL to the provided path.
      *
-     * @param null $path
+     * @param  null   $path
      * @return string
      */
     public function to($path = null)
