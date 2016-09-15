@@ -13,6 +13,13 @@ class UrlFieldType extends FieldType
 {
 
     /**
+     * The input class.
+     *
+     * @var string
+     */
+    protected $class = 'form-control';
+
+    /**
      * Base field type rules.
      *
      * @var array
