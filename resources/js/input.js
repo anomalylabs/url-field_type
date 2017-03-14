@@ -1,9 +1,10 @@
-$(function () {
+$(document).on('ajaxComplete ready', function () {
+
     var
-        $inputs = $('[data-provides="anomaly.field_type.url"]'),
+        $inputs = $('[data-provides="anomaly.field_type.url"]:not([data-initialized])'),
         scheme = window.location.protocol + '//';
 
-    $inputs.attr('placeholder', scheme);
+    $inputs.data('initialized', '');
 
     $inputs.on('keyup', function (event) {
         var
