@@ -6,9 +6,9 @@ $(document).on('ajaxComplete ready', function () {
 
     $inputs.data('initialized', '');
 
-    $inputs.on('keyup', function (event) {
+    $inputs.on('keyup', function (e) {
         var
-            $target = $(event.target),
+            $target = $(e.target),
             value = $target.val();
 
         if (value && !value.match(/^https?:\/\//)) {
@@ -16,9 +16,9 @@ $(document).on('ajaxComplete ready', function () {
         }
     });
 
-    $inputs.on('blur', function (event) {
+    $inputs.on('blur', function (e) {
         var
-            $target = $(event.target),
+            $target = $(e.target),
             value = $target.val();
 
         if (value && ['http://', 'https://'].includes(value)) {
@@ -26,9 +26,9 @@ $(document).on('ajaxComplete ready', function () {
         }
     });
 
-    $inputs.on('focus', function (event) {
+    $inputs.on('focus', function (e) {
         var
-            $target = $(event.target),
+            $target = $(e.target),
             value = $target.val();
 
         if (!value) {
