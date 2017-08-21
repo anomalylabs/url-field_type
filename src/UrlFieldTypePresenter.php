@@ -120,4 +120,15 @@ class UrlFieldTypePresenter extends FieldTypePresenter
 
         return "{$scheme}://{$host}{$port}{$path}";
     }
+
+    /**
+     * Normalize the URL by default.
+     *
+     * @return bool|string
+     */
+    public function __toString()
+    {
+        return $this->object->normalize();
+    }
+
 }
