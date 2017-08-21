@@ -21,6 +21,13 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     protected $html;
 
     /**
+     * The decorated object.
+     *
+     * @var UrlFieldType
+     */
+    protected $object;
+
+    /**
      * Create a new UrlFieldTypePresenter instance.
      *
      * @param HtmlBuilder $html
@@ -37,7 +44,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     /**
      * Return the parsed query string.
      *
-     * @param  null       $key
+     * @param  null $key
      * @return null|mixed
      */
     public function query($key = null)
@@ -58,12 +65,12 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     /**
      * Return the parsed URL.
      *
-     * @param  null       $key
+     * @param  null $key
      * @return array|null
      */
     public function parsed($key = null)
     {
-        if ($url = $this->object->getValue()) {
+        if ($url = $this->object->normalize()) {
 
             $parsed = parse_url($url);
 
@@ -85,12 +92,12 @@ class UrlFieldTypePresenter extends FieldTypePresenter
      */
     public function link($title = null, $attributes = [])
     {
-        if (!$url = $this->object->getValue()) {
+        if (!$url = $this->object->normalize()) {
             return null;
         }
 
         if (!$title) {
-            $title = $this->object->getValue();
+            $title = $this->object->normalize();
         }
 
         return $this->html->link($url, $title, $attributes);
@@ -99,7 +106,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     /**
      * Return the URL to the provided path.
      *
-     * @param  null   $path
+     * @param  null $path
      * @return string
      */
     public function to($path = null)
