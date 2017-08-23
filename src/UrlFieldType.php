@@ -87,8 +87,8 @@ class UrlFieldType extends FieldType
          * Otherwise try adding
          * a protocol and test that.
          */
-        if (filter_var($this->url->formatScheme(null) . $value, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
-            return $this->url->formatScheme(null) . $value;
+        if (filter_var($this->formatScheme(null) . $value, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+            return $this->formatScheme(null) . $value;
         }
 
         /**
@@ -100,6 +100,24 @@ class UrlFieldType extends FieldType
         }
 
         return $value;
+    }
+
+    /**
+     * Get the default scheme for a raw URL.
+     * This method is a polyfill for the same method in > Laravel 5.4 UrlGenerator.
+     *
+     * @param  bool|null  $secure
+     * @return string
+     */
+    protected function formatScheme($secure)
+    {
+        if (! is_null($secure)) {
+            return $secure ? 'https://' : 'http://';
+        }
+        if (is_null($this->url->cachedSchema)) {
+            $this->url->cachedSchema = $this->url->forceScheme ?: $this->url->getScheme().'://';
+        }
+        return $this->url->cachedSchema;
     }
 
 }
