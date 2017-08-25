@@ -107,10 +107,14 @@ class UrlFieldTypePresenter extends FieldTypePresenter
      * Return the URL to the provided path.
      *
      * @param  null $path
-     * @return string
+     * @return null|string
      */
     public function to($path = null)
     {
+        if (!$this->object->getValue()) {
+            return null;
+        }
+
         $scheme = $this->parsed('scheme');
         $host   = $this->parsed('host');
         $port   = $this->parsed('port');
