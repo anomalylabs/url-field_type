@@ -89,8 +89,8 @@ class UrlFieldType extends FieldType
          * Otherwise try adding
          * a protocol and test that.
          */
-        if (filter_var($this->url->forceSchema(null) . $value, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
-            return $this->url->forceSchema(null) . $value;
+        if (filter_var($this->url->getScheme(null) . $value, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+            return $this->url->getScheme(null) . $value;
         }
 
         /**
@@ -103,5 +103,4 @@ class UrlFieldType extends FieldType
 
         return $value;
     }
-
 }
