@@ -3,6 +3,7 @@
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Routing\UrlGenerator;
 use Anomaly\UrlFieldType\Validator\ValidUrl;
+use Illuminate\Http\Request;
 
 /**
  * Class UrlFieldType
@@ -20,6 +21,13 @@ class UrlFieldType extends FieldType
      * @var UrlGenerator
      */
     protected $url;
+
+    /**
+     * The request object.
+     *
+     * @var Request
+     */
+    protected $request;
 
     /**
      * The input class.
@@ -60,10 +68,12 @@ class UrlFieldType extends FieldType
      * Create a new UrlFieldType instance.
      *
      * @param UrlGenerator $url
+     * @param Request $request
      */
-    public function __construct(UrlGenerator $url)
+    public function __construct(UrlGenerator $url, Request $request)
     {
-        $this->url = $url;
+        $this->url     = $url;
+        $this->request = $request;
     }
 
     /**
@@ -89,8 +99,8 @@ class UrlFieldType extends FieldType
          * Otherwise try adding
          * a protocol and test that.
          */
-        if (filter_var($this->url->forceScheme(null) . $value, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
-            return $this->url->forceScheme(null) . $value;
+        if (filter_var('http://' . $value, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+            return ($this->request->isSecure() ? 'https://' : 'http://') . $value;
         }
 
         /**
