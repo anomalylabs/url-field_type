@@ -132,7 +132,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
      */
     public function __toString()
     {
-        return $this->object->normalize();
+        return $this->object->normalize() ?: '';
     }
 
 }
