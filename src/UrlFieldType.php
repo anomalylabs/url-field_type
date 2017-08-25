@@ -69,11 +69,13 @@ class UrlFieldType extends FieldType
     /**
      * Return the normalized URL.
      *
-     * @return bool|string
+     * @return string|null
      */
     public function normalize()
     {
-        $value = $this->getValue();
+        if (!$value = $this->getValue()) {
+            return null;
+        }
 
         /**
          * If it's already a URL
