@@ -99,7 +99,7 @@ class UrlFieldType extends FieldType
          * Otherwise try adding
          * a protocol and test that.
          */
-        if (filter_var('http://' . $value, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+        if (filter_var('http://' . $value, FILTER_VALIDATE_URL) && str_contains($value, '.')) {
             return ($this->request->isSecure() ? 'https://' : 'http://') . $value;
         }
 
