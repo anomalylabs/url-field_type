@@ -4,6 +4,7 @@ use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Routing\UrlGenerator;
 use Anomaly\UrlFieldType\Validator\ValidUrl;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 
 /**
  * Class UrlFieldType
@@ -65,14 +66,23 @@ class UrlFieldType extends FieldType
     protected $inputView = 'anomaly.field_type.url::input';
 
     /**
+     * The router utility.
+     *
+     * @var Router
+     */
+    protected $router;
+
+    /**
      * Create a new UrlFieldType instance.
      *
      * @param UrlGenerator $url
-     * @param Request $request
+     * @param Router       $router
+     * @param Request      $request
      */
-    public function __construct(UrlGenerator $url, Request $request)
+    public function __construct(UrlGenerator $url, Router $router, Request $request)
     {
         $this->url     = $url;
+        $this->router  = $router;
         $this->request = $request;
     }
 
@@ -85,6 +95,15 @@ class UrlFieldType extends FieldType
     {
         if (!$value = $this->getValue()) {
             return null;
+        }
+
+        /**
+         * If the value is a route
+         * then let's use that
+         * first and foremost.
+         */
+        if ($this->router->has($value)) {
+            return $this->url->route($value);
         }
 
         /**

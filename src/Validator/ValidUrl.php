@@ -1,7 +1,7 @@
 <?php namespace Anomaly\UrlFieldType\Validator;
 
 use Anomaly\Streams\Platform\Routing\UrlGenerator;
-use Anomaly\UrlFieldType\UrlFieldType;
+use Illuminate\Routing\Router;
 
 /**
  * Class ValidUrl
@@ -33,11 +33,20 @@ class ValidUrl
     /**
      * Handle the validation.
      *
-     * @param $value
+     * @param        $value
+     * @param Router $router
      * @return bool
      */
-    public function handle($value, UrlFieldType $type)
+    public function handle($value, Router $router)
     {
+
+        /**
+         * Check if it's a
+         * route and use that.
+         */
+        if ($router->has($value)) {
+            return true;
+        }
 
         /**
          * If it matches now
@@ -56,10 +65,18 @@ class ValidUrl
         }
 
         /**
-         * Lastly try making it
+         * Just try making it
          * a URL and test that.
          */
         if (filter_var($this->url->to($value), FILTER_VALIDATE_URL)) {
+            return true;
+        }
+
+        /**
+         * Also check if it's a
+         * hash value which is OK.
+         */
+        if (starts_with($value, '#')) {
             return true;
         }
 
