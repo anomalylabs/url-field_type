@@ -58,9 +58,10 @@ class ValidUrl
 
         /**
          * Otherwise try adding
-         * a protocol and test that.
+         * a protocol and make
+         * sure it's got a ".".
          */
-        if (filter_var('http://' . $value, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+        if (strpos($value, '.') && filter_var('http://' . $value, FILTER_VALIDATE_URL)) {
             return true;
         }
 
