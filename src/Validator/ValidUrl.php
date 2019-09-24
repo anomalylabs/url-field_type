@@ -1,6 +1,5 @@
 <?php namespace Anomaly\UrlFieldType\Validator;
 
-use Anomaly\Streams\Platform\Routing\UrlGenerator;
 use Illuminate\Routing\Router;
 
 /**
@@ -14,26 +13,9 @@ class ValidUrl
 {
 
     /**
-     * The URL generator.
-     *
-     * @var UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * Create a new ValidUrl instance.
-     *
-     * @param UrlGenerator $url
-     */
-    public function __construct(UrlGenerator $url)
-    {
-        $this->url = $url;
-    }
-
-    /**
      * Handle the validation.
      *
-     * @param        $value
+     * @param $value
      * @param Router $router
      * @return bool
      */
@@ -69,7 +51,7 @@ class ValidUrl
          * Just try making it
          * a URL and test that.
          */
-        if (filter_var($this->url->to($value), FILTER_VALIDATE_URL)) {
+        if (filter_var(url($value), FILTER_VALIDATE_URL)) {
             return true;
         }
 

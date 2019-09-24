@@ -71,7 +71,6 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     public function parsed($key = null)
     {
         if ($url = $this->object->normalize()) {
-
             $parsed = parse_url($url);
 
             if ($key) {
@@ -134,5 +133,4 @@ class UrlFieldTypePresenter extends FieldTypePresenter
     {
         return (string)$this->object->normalize() ?: '';
     }
-
 }

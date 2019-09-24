@@ -17,27 +17,6 @@ class UrlFieldType extends FieldType
 {
 
     /**
-     * The URL generator.
-     *
-     * @var UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * The request object.
-     *
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * The input class.
-     *
-     * @var string
-     */
-    protected $class = 'form-control';
-
-    /**
      * The field type rules.
      *
      * @var array
@@ -66,27 +45,6 @@ class UrlFieldType extends FieldType
     protected $inputView = 'anomaly.field_type.url::input';
 
     /**
-     * The router utility.
-     *
-     * @var Router
-     */
-    protected $router;
-
-    /**
-     * Create a new UrlFieldType instance.
-     *
-     * @param UrlGenerator $url
-     * @param Router       $router
-     * @param Request      $request
-     */
-    public function __construct(UrlGenerator $url, Router $router, Request $request)
-    {
-        $this->url     = $url;
-        $this->router  = $router;
-        $this->request = $request;
-    }
-
-    /**
      * Return the normalized URL.
      *
      * @return string|null
@@ -102,8 +60,8 @@ class UrlFieldType extends FieldType
          * then let's use that
          * first and foremost.
          */
-        if ($this->router->has($value)) {
-            return $this->url->route($value);
+        if (\Route::has($value)) {
+            return url()->route($value);
         }
 
         /**
@@ -119,18 +77,17 @@ class UrlFieldType extends FieldType
          * a protocol and test that.
          */
         if (filter_var('http://' . $value, FILTER_VALIDATE_URL) && str_contains($value, '.')) {
-            return ($this->request->isSecure() ? 'https://' : 'http://') . $value;
+            return (request()->isSecure() ? 'https://' : 'http://') . $value;
         }
 
         /**
          * Lastly try making it
          * a URL and test that.
          */
-        if (filter_var($this->url->to($value), FILTER_VALIDATE_URL)) {
-            return $this->url->to($value);
+        if (filter_var(url($value), FILTER_VALIDATE_URL)) {
+            return url($value);
         }
 
         return $value;
     }
-
 }
