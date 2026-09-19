@@ -53,7 +53,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
             return null;
         }
 
-        parse_str(array_get($parsed, 'query'), $query);
+        parse_str(array_get($parsed, 'query', ''), $query);
 
         if ($key) {
             return array_get($query, $key);
@@ -111,16 +111,20 @@ class UrlFieldTypePresenter extends FieldTypePresenter
      */
     public function to($path = null)
     {
-        if (!$this->object->normalize()) {
+        if (!$parsed = $this->parsed()) {
             return null;
         }
 
-        $scheme = $this->parsed('scheme');
-        $host   = $this->parsed('host');
-        $port   = $this->parsed('port');
+        if (!$scheme = array_get($parsed, 'scheme')) {
+            return null;
+        }
 
-        $port = $port ? ':' . $port : null;
-        $path = $path ? '/' . $path : null;
+        if (!$host = array_get($parsed, 'host')) {
+            return null;
+        }
+
+        $port = ($port = array_get($parsed, 'port')) ? ':' . $port : null;
+        $path = $path ? '/' . ltrim($path, '/') : null;
 
         return "{$scheme}://{$host}{$port}{$path}";
     }

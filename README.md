@@ -4,18 +4,34 @@
 
 #### A URL field type.
 
-The URL field type provides an HTML input with built-in URL validation and formatting.
+The URL field type provides a text input for a URL, a URI path or a named route, with validation and
+normalization on the way out.
 
 ## Features
 
-- HTML5 URL input type
-- Automatic URL validation
-- Protocol detection and normalization
-- Support for relative and absolute URLs
-- Link generation helpers
-- Target attribute configuration
-- Custom validation rules
-- Database storage optimization
+- Accepts absolute URLs, relative URI paths, fragments and named routes
+- Protocol detection - a bare host is given a scheme on output
+- Named route resolution
+- Scheme allow-list, configurable per installation
+- Link generation helpers on the presenter
+- URL component access - scheme, host, path, query
+
+## Accepted Values
+
+The field is deliberately wider than "a URL". All of these are valid and are resolved by
+`normalize()` when the value is read:
+
+| Value | Resolves to |
+|---|---|
+| `https://example.com/a?b=c` | unchanged |
+| `example.com` | `http://example.com` (or `https://` on a secure request) |
+| `/some-slug` | `http://yoursite.com/some-slug` |
+| `some/slug` | `http://yoursite.com/some/slug` |
+| `#anchor` | `#anchor` |
+| `anomaly.module.users::login` | the URL of that named route |
+| `mailto:a@b.com`, `tel:+441234567890` | unchanged |
+
+A named route is resolved first, so a route name always wins over any other interpretation.
 
 ## Configuration
 
@@ -40,90 +56,95 @@ protected $fields = [
 ]
 ```
 
-### With Default Protocol
+The input falls back to `http://` when no placeholder is set.
+
+### Allowed Schemes
+
+A value carrying a scheme outside the allow-list is rejected on input and returns `null` from
+`normalize()`, so it never reaches an `href`. The default list is:
 
 ```php
-'website' => [
-    'type'   => 'anomaly.field_type.url',
-    'config' => [
-        'default_protocol' => 'https'
-    ]
-]
+['http', 'https', 'mailto', 'tel']
 ```
 
-## Usage Examples
+Values with no scheme - relative paths, fragments, bare hosts and route names - are unaffected.
 
-### Basic URL Field
-
-```php
-$stream->create([
-    'website' => 'https://pyrocms.com'
-]);
-```
-
-### With Validation
+To change the list, publish the addon's config and edit `schemes.php`:
 
 ```php
-protected $fields = [
-    'homepage' => [
-        'type'  => 'anomaly.field_type.url',
-        'rules' => [
-            'required'
-        ]
-    ]
+// resources/config/schemes.php
+return [
+    'http',
+    'https',
+    'mailto',
+    'tel',
+    'ftp',
 ];
 ```
 
+The key is `anomaly.field_type.url::schemes`. Note that addon config is not covered by
+`php artisan config:cache`, and the packaged default applies if the file cannot be read.
+
 ## Accessing Values
 
-### In Twig Templates
+### Basic Output
 
-```twig
-{# Display as link #}
-<a href="{{ entry.website }}">Visit Website</a>
-
-{# Display with target blank #}
-<a href="{{ entry.website }}" target="_blank" rel="noopener">
-    {{ entry.website }}
-</a>
-
-{# Check if URL exists #}
-{% if entry.website %}
-    <a href="{{ entry.website }}">Link</a>
-{% endif %}
-
-{# Display domain only #}
-{{ entry.website|parse_url(constant('PHP_URL_HOST')) }}
-```
-
-### In PHP
+The field returns the stored string:
 
 ```php
-$entry = $model->find(1);
+$entry->website; // https://pyrocms.com
+```
 
-// Get URL
-$url = $entry->website;
+```twig
+<a href="{{ entry.website }}">Visit Website</a>
+```
 
-// Parse URL components
-$parsed = parse_url($entry->website);
-$domain = $parsed['host'];
-$scheme = $parsed['scheme'];
+### Presenter Output
 
-// Check if URL is external
-$isExternal = !str_contains($entry->website, config('app.url'));
+The decorated value - `Anomaly\UrlFieldType\UrlFieldTypePresenter` - adds four methods.
+
+#### link($title = null, $attributes = [])
+
+Returns an anchor for the normalized URL, or `null` when there is no usable value. The title
+defaults to the URL itself. Both the URL and the title are entity-encoded by the HTML builder.
+
+```twig
+{{ decorated.link('PyroCMS') }}
+{{ decorated.link('PyroCMS', {'class': 'btn', 'target': '_blank', 'rel': 'noopener'}) }}
+```
+
+#### to($path = null)
+
+Returns the value's scheme, host and port with `$path` appended - the value used as a root URL, so
+its own path and query are dropped. Returns `null` when the value has no scheme and host, which is
+the case for a fragment, a `mailto:` or a `tel:` value.
+
+```twig
+{{ decorated.to('docs') }}   {# https://example.com/docs #}
+```
+
+#### parsed($key = null)
+
+Returns `parse_url()` output for the normalized URL, or one component of it.
+
+```twig
+{{ decorated.parsed('host') }}
+{{ decorated.parsed('path') }}
+```
+
+#### query($key = null)
+
+Returns the query string as an array, or one value from it.
+
+```twig
+{{ decorated.query('id') }}
+```
+
+```php
+$id = $decorated->query('id');
 ```
 
 ## Setting Values
-
-### In Forms
-
-```php
-$form = $builder->make('example.module.test');
-$form->on('saving', function(FormBuilder $builder) {
-    $entry = $builder->getFormEntry();
-    $entry->website = 'https://example.com';
-});
-```
 
 ### Direct Assignment
 
@@ -132,12 +153,27 @@ $entry->website = 'https://pyrocms.com';
 $entry->save();
 ```
 
+### In Forms
+
+```php
+$form = $builder->make('example.module.test');
+$form->on('saving', function (FormBuilder $builder) {
+    $entry = $builder->getFormEntry();
+    $entry->website = 'https://example.com';
+});
+```
+
 ## Database Structure
 
-The URL field type stores URLs as:
-- **VARCHAR(255)** - The complete URL string
+The URL field type stores the value as written, in a **VARCHAR(255)** column.
 
 ## Validation
+
+The field type applies its own `valid_url` rule automatically. It accepts named routes, relative
+URIs, fragments and bare hosts, and rejects a value whose scheme is not allowed, an authority URL
+without a host, a protocol-relative value and anything carrying whitespace.
+
+Laravel's own rules can be added on top and are stricter.
 
 ### Required URL
 
@@ -150,6 +186,9 @@ The URL field type stores URLs as:
     ]
 ]
 ```
+
+Note `url` requires an absolute URL, so adding it rules out the relative paths, fragments, bare
+hosts and route names the field otherwise accepts.
 
 ### Active URL (DNS Check)
 
@@ -205,54 +244,26 @@ The URL field type stores URLs as:
         'regex:/^https:\/\/(www\.)?facebook\.com\//'
     ]
 ]
-
-'twitter_url' => [
-    'type'   => 'anomaly.field_type.url',
-    'config' => [
-        'placeholder' => 'https://twitter.com/yourusername'
-    ],
-    'rules' => [
-        'url',
-        'regex:/^https:\/\/(www\.)?twitter\.com\//'
-    ]
-]
 ```
 
-### Documentation Link
+### Internal Link
 
 ```php
-'docs_url' => [
+'read_more' => [
     'type'   => 'anomaly.field_type.url',
     'config' => [
-        'placeholder' => 'https://docs.example.com'
-    ]
-]
-```
-
-### External Resource
-
-```php
-'external_link' => [
-    'type'   => 'anomaly.field_type.url',
-    'config' => [
-        'default_protocol' => 'https'
-    ],
-    'rules' => [
-        'required',
-        'url'
+        'placeholder' => '/about'
     ]
 ]
 ```
 
 ## Best Practices
 
-1. **Validate Format**: Always use URL validation rules
-2. **Normalize URLs**: Store URLs with consistent protocols (http/https)
-3. **External Links**: Add `target="_blank"` and `rel="noopener"` for external links
-4. **Secure Links**: Prefer HTTPS URLs when possible
-5. **User Guidance**: Provide clear placeholders showing expected format
-6. **Link Checking**: Consider implementing periodic link validation
-7. **Display Formatting**: Truncate or format long URLs for display
+1. **Validate Format**: Add `url` where only absolute URLs make sense, and leave it off where
+   relative paths are wanted
+2. **External Links**: Add `target="_blank"` and `rel="noopener"` for external links
+3. **User Guidance**: Provide a placeholder showing the expected format
+4. **Display Formatting**: Truncate or format long URLs for display
 
 ## Requirements
 
