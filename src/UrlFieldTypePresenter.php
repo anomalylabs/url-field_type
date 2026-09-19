@@ -111,7 +111,7 @@ class UrlFieldTypePresenter extends FieldTypePresenter
      */
     public function to($path = null)
     {
-        if (!$this->object->getValue()) {
+        if (!$this->object->normalize()) {
             return null;
         }
 
